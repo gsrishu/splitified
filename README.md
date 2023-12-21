@@ -36,4 +36,4 @@ Expense Tracker is a web application that helps you track expenses and simplify 
 ### Installation
 
 1. Clone the repository:
-   git clone https://github.com/your-username/expense-tracker.git
+   git@github.com:gsrishu/splitwise-backend.git
