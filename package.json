@@ -1,0 +1,37 @@
+{
+  "name": "splitwise-clone",
+  "version": "1.0.0",
+  "description": "Expense Tracker is a web application that helps you track expenses and simplify group payments. It allows users to create groups, add expenses, and settle debts within the group efficiently.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": " ts-node node dist/index.js",
+    "dev": "concurrently \"npm run watch-ts\" \"npm run start\"",
+    "watch-ts": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gsrishu/splitwise-backend.git"
+  },
+  "author": "gaurav singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gsrishu/splitwise-backend/issues"
+  },
+  "homepage": "https://github.com/gsrishu/splitwise-backend#readme",
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^20.10.5",
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6"
+  }
+}
