@@ -1,29 +1,29 @@
 import express from 'express';
 
-const expenseRouter = express.Router();
+const groupExpenseRouter = express.Router();
 /**
  * @swagger
  * tags:
- *   - name: Expenses
+ *   - name: Group Expense
  *     description: Operations related to expenses
  * paths:
- *   /api/expenses:
+ *   /api/group-expenses:
  *     get:
- *       summary: Get all expenses
+ *       summary: Group Expense
  *       description: Retrieve a list of all expenses
  *       tags:
- *         - Expenses
+ *         -  Group Expense
  *       responses:
  *         '200':
  *           description: Successful response
  *           content:
  *             application/json:
  *               example:
- *                 message: Expenses retrieved successfully
+ *                 message:  Group Expense retrieved successfully
  */
-expenseRouter.get('/expenses', (req, res) => {
+groupExpenseRouter.get('/expenses', (req, res) => {
   res.send('Get all expenses');
 });
 
-export default expenseRouter;
+export default groupExpenseRouter;
  
