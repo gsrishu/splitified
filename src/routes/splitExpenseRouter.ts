@@ -1,29 +1,29 @@
 import express from 'express';
 
-const expenseRouter = express.Router();
+const splitExpenseRouter = express.Router();
 /**
  * @swagger
  * tags:
- *   - name: Expenses
+ *   - name: Split Expense
  *     description: Operations related to expenses
  * paths:
- *   /api/expenses:
+ *   /api/split-expenses:
  *     get:
- *       summary: Get all expenses
+ *       summary: Split Expense
  *       description: Retrieve a list of all expenses
  *       tags:
- *         - Expenses
+ *         - Split Expense
  *       responses:
  *         '200':
  *           description: Successful response
  *           content:
  *             application/json:
  *               example:
- *                 message: Expenses retrieved successfully
+ *                 message: Split Expense retrieved successfully
  */
-expenseRouter.get('/expenses', (req, res) => {
+splitExpenseRouter.get('/expenses', (req, res) => {
   res.send('Get all expenses');
 });
 
-export default expenseRouter;
+export default splitExpenseRouter;
  
