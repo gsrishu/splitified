@@ -1,12 +1,14 @@
-import express from 'express';
-const userRouter = express.Router();
+import express from 'express'
+const userRouter = express.Router()
+import { userSignUp } from '../validitor/userValidation'
+import { UserController } from '../controllers/userController';
 /**
  * @swagger
  * tags:
  *   - name: User
  *     description: Operations related to User
  * paths:
- *   /api/login:
+ *   /user/login:
  *     get:
  *       summary: Get one user
  *       description: Retrieve a user
@@ -19,12 +21,30 @@ const userRouter = express.Router();
  *             application/json:
  *               example:
  *                 message: User retrieved successfully
- *   /api/signup:
+ *   /user/signup:
  *     post:
  *       summary: Create a new user
  *       description: Register a new user
  *       tags:
  *         - User
+ *       requestBody:
+ *         description: User data
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userName:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 password:
+ *                   type: string
+ *               required:
+ *                 - userName
+ *                 - email
+ *                 - password
  *       responses:
  *         '200':
  *           description: Successful response
@@ -33,12 +53,12 @@ const userRouter = express.Router();
  *               example:
  *                 message: User created successfully
  */
-
-userRouter.get("/login",(req,res)=>{
-
-    res.send("Login successfull")
+userRouter.get('/login', (req, res) => {
+  res.send('Login successfull')
 })
-userRouter.post("/signup",(req,res)=>{
-    res.send("signup")
+userRouter.post('/signup', async(req, res) => {
+  const { userName, email, password } = req.body
+  const result =  await UserController.signUp({userName, email, password }) 
+  res.send(result)
 })
-export default userRouter;
+export default userRouter
