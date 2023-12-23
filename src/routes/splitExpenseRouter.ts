@@ -1,6 +1,6 @@
-import express from 'express';
+import express from 'express'
 
-const splitExpenseRouter = express.Router();
+const splitExpenseRouter = express.Router()
 /**
  * @swagger
  * tags:
@@ -22,8 +22,7 @@ const splitExpenseRouter = express.Router();
  *                 message: Split Expense retrieved successfully
  */
 splitExpenseRouter.get('/expenses', (req, res) => {
-  res.send('Get all expenses');
-});
+  res.send('Get all expenses')
+})
 
-export default splitExpenseRouter;
- 
+export default splitExpenseRouter
