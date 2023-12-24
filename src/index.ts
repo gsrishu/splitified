@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import express from 'express'
 import mongoose from 'mongoose'
 const swagger = require('../swagger/swaggerConfig')
@@ -19,5 +21,5 @@ db.once('open', () => {
 })
 const port = process.env.PORT || 3000
 app.listen(port, () => {
-  console.log(`Swagger Docs URL: http://localhost:${port}/splitwise`)
+  console.log(`Swagger Docs URL: http://localhost:${port}/splitified`)
 })

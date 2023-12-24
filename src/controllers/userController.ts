@@ -1,5 +1,5 @@
-import { IUser } from '../interface/UserInterface'
-import {userSignUp} from '../validitor/userValidation'
+import { IUser, ILoginUser } from '../interface/UserInterface'
+import {userSignUp, userLogin} from '../validitor/userValidation'
 import { userService } from '../services/userService'
 export class UserController {
   
@@ -11,6 +11,18 @@ export class UserController {
             throw new Error(error.details[0].message) 
         }else{
             const result = await userService.signup(userName,email,password);
+            return result
+        }
+    }
+
+    static async login(request:ILoginUser){
+
+        const{error} = await userLogin.validate(request)
+        if(error){
+            throw new Error(error.details[0].message)
+        }else{
+            const {userName,password} = request
+            const result = await userService.login(userName,password)
             return result
         }
     }

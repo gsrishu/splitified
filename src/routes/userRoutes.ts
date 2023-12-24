@@ -1,7 +1,7 @@
 import express from 'express'
 const userRouter = express.Router()
 import { userSignUp } from '../validitor/userValidation'
-import { UserController } from '../controllers/userController';
+import { UserController } from '../controllers/userController'
 /**
  * @swagger
  * tags:
@@ -9,11 +9,26 @@ import { UserController } from '../controllers/userController';
  *     description: Operations related to User
  * paths:
  *   /user/login:
- *     get:
+ *     post:
  *       summary: Get one user
  *       description: Retrieve a user
  *       tags:
  *         - User
+ *       requestBody:
+ *         description: User data
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userName:
+ *                   type: string
+ *                 password:
+ *                   type: string
+ *               required:
+ *                 - userName
+ *                 - password
  *       responses:
  *         '200':
  *           description: Successful response
@@ -43,7 +58,6 @@ import { UserController } from '../controllers/userController';
  *                   type: string
  *               required:
  *                 - userName
- *                 - email
  *                 - password
  *       responses:
  *         '200':
@@ -53,12 +67,15 @@ import { UserController } from '../controllers/userController';
  *               example:
  *                 message: User created successfully
  */
-userRouter.get('/login', (req, res) => {
-  res.send('Login successfull')
+
+userRouter.post('/login', async (req, res) => {
+  const { userName, password } = req.body
+  const result = await UserController.login({ userName, password })
+  res.send(result)
 })
-userRouter.post('/signup', async(req, res) => {
+userRouter.post('/signup', async (req, res) => {
   const { userName, email, password } = req.body
-  const result =  await UserController.signUp({userName, email, password }) 
+  const result = await UserController.signUp({ userName, email, password })
   res.send(result)
 })
 export default userRouter
