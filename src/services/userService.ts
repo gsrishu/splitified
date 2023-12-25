@@ -1,9 +1,9 @@
 import { checkUser, insertUser, loginUser } from '../models/userModel'
-import { splitifiedError } from '../errors/customError'
-import { errorLang } from '../errors/errorLang'
+import { splitifiedError } from '../response/customError'
 import { IReturn, ILogin } from '../interface/CommonInterface'
 import * as _ from 'lodash'
 import authObj from '../authentication/auth'
+import { successResponse, httpStatusCode, errorLang } from '../response/index'
 export class userService {
   //Signup function
 
@@ -14,29 +14,33 @@ export class userService {
   ): Promise<IReturn> {
     try {
       const userCheck = await checkUser(userName, email)
-      console.log('usercheck=>', userCheck)
       if (!_.isEmpty(userCheck)) {
         const userError = new splitifiedError(
           errorLang.message.USER_ALREADY_EXISTS,
-          400,
+          httpStatusCode.clientError.CONFLICT,
           errorLang.process.signup,
           errorLang.service.userservice,
         )
         throw userError
       } else {
         const insertUserResult = await insertUser(userName, email, password)
-        console.log('insertUserResult=>', insertUserResult)
         return {
-          statusCode: insertUserResult ? 200 : 404,
+          statusCode: insertUserResult
+            ? httpStatusCode.success.CREATED
+            : httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
           success: !!insertUserResult,
           message: insertUserResult
-            ? 'User signup successful'
-            : 'User signup failed',
+            ? successResponse.message.SIGNUP_SUCCESSFULLY
+            : errorLang.message.SIGNUP_FAILED,
         }
       }
     } catch (error: any) {
       console.info(error)
-      return { statusCode: 404, success: false, message: error.message }
+      return {
+        statusCode: httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: error.message,
+      }
     }
   }
 
@@ -59,9 +63,9 @@ export class userService {
             userName: userName,
           })
           return {
-            statusCode: 200,
+            statusCode: httpStatusCode.success.OK,
             success: true,
-            message: 'Login Successful',
+            message: successResponse.message.LOGIN_SUCCESSFULLY,
             authToken: toeknResult,
           }
         } catch (error) {
@@ -72,7 +76,7 @@ export class userService {
     } catch (error: any) {
       console.info(error)
       return {
-        statusCode: 404,
+        statusCode: httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
         success: false,
         message: error.message,
       }

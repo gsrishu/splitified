@@ -20,7 +20,19 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
 })
 const userModel = mongoose.model<IUser>('User', userSchema)
 
-const getUser = async () => {}
+const getUserId = async (userName:string) => {
+
+  try{
+    const userId = await userModel.findOne({
+      userName:userName
+    })
+    if(!_.isEmpty(userId)){
+      return _.get(userId,"_id")
+    }
+  }catch(error){
+    throw error
+  }
+}
 const insertUser = async (
   userName: string,
   email: string,
@@ -63,4 +75,4 @@ const loginUser = async (userName: string, password: string) => {
     return error
   }
 }
-export { userModel, getUser, insertUser, checkUser, loginUser }
+export { userModel, getUserId, insertUser, checkUser, loginUser }

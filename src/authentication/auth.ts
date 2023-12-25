@@ -1,7 +1,7 @@
 import * as Jwt from 'jsonwebtoken'
 import { config } from '../config'
 import bcrypt from 'bcrypt'
-
+import {httpStatusCode,errorLang} from '../response/index'
 interface Ipayload {
   userName: string
 }
@@ -29,6 +29,19 @@ class Authentication {
     } catch (error) {
       throw new Error('Error validating password')
     }
+  }
+
+  async validateToken(token:string){
+    if(!token){
+      return {
+        statusCode:httpStatusCode.clientError.UNAUTHORIZED,
+        message:errorLang.message.USER_NOT_AUTHENTICATED
+      }
+    }else{
+      const result  = await Jwt.verify(token,config.JWT_SECRET);
+      return result
+    }
+
   }
 }
 
