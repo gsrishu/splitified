@@ -9,3 +9,7 @@ export interface IGroup {
   createdAt?: Date
   updatedAt?: Date
 }
+export interface Imembers{
+    members:string[]
+    groupId:string
+}

@@ -4,6 +4,7 @@ const groupRouter = express.Router()
 import Authentication from '../authentication/auth'
 import { successResponse, httpStatusCode, errorLang } from '../response/index'
 import _ from 'lodash'
+import { group } from 'console'
 /**
  * @swagger
  * tags:
@@ -36,20 +37,43 @@ import _ from 'lodash'
  *               example
  *                 message: Group created successfully
  */
+const validateTokenMiddleware = async (req: any, res: any, next: any) => {
+  const token = req.headers.jwt_token as string
+  console.log('token---->', token)
+  const tokenResult = await Authentication.validateToken(token)
+  if (tokenResult.statusCode === 401) {
+    res.status(httpStatusCode.clientError.UNAUTHORIZED).send({
+      statusCode: httpStatusCode.clientError.UNAUTHORIZED,
+      message: errorLang.message.USER_NOT_AUTHENTICATED,
+    })
+    return
+  }
+  req.tokenResult = tokenResult
+  console.log('req---->', req.body)
+  next()
+}
 groupRouter.get('/group', (req, res) => {
   res.send('group created')
 })
 groupRouter.post('/create-group', async (req, res) => {
   const token = req.headers.jwt_token as string
   const tokenResult: any = await Authentication.validateToken(token)
-  if (_.isEmpty(tokenResult)) {
+  if (tokenResult.statusCode === 401) {
     res.send({
       statusCode: httpStatusCode.clientError.UNAUTHORIZED,
       message: errorLang.message.USER_NOT_AUTHENTICATED,
     })
+    return
   }
   const result = await groupController.createGroup(req.body, tokenResult)
-  console.log('RouterResult---->', result)
   res.send(result)
 })
+groupRouter.post(
+  '/add-member',
+  validateTokenMiddleware,
+  async (req: any, res) => {
+    const result = await groupController.addMembers(req.body, req.tokenResult)
+    res.send(result)
+  },
+)
 export default groupRouter

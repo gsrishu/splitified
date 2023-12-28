@@ -1,5 +1,6 @@
 import mongoose, { ObjectId, Schema, Types } from 'mongoose'
 import { IGroup } from '../interface/GroupInterface'
+import _ from 'lodash'
 const groupSchema: Schema<IGroup> = new mongoose.Schema({
   _id: {
     type: Types.ObjectId,
@@ -69,4 +70,30 @@ const createGroup = async (groupName: string, admin: Types.ObjectId) => {
   }
 }
 
-export { groupModel, createGroup, isGroupExists }
+const getGroupData = async (groupId: string) => {
+  try {
+    const groupInfo = await groupModel.findOne({ _id: groupId })
+    
+    console.log("groupInfo---->",groupInfo)
+    if (!_.isEmpty(groupInfo)) {
+      return groupInfo
+    }
+  } catch (error) {
+    return error
+  }
+}
+const updateMember = async (members: string[], groupId: string) => {
+  try {
+    console.log("updateMember---->",{ _id: groupId }, { $set: { members: members } })
+    const result = await groupModel.updateOne(
+      { _id: groupId },
+      { $set: { members: members } },
+    )
+
+    return result.modifiedCount
+  } catch (error) {
+    throw error
+  }
+}
+
+export { groupModel, createGroup, isGroupExists, getGroupData, updateMember }

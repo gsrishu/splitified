@@ -1,7 +1,9 @@
 import * as Jwt from 'jsonwebtoken'
+import { TokenExpiredError } from 'jsonwebtoken'
 import { config } from '../config'
 import bcrypt from 'bcrypt'
-import {httpStatusCode,errorLang} from '../response/index'
+import { httpStatusCode, errorLang } from '../response/index'
+import { NextFunction } from 'express'
 interface Ipayload {
   userName: string
 }
@@ -31,17 +33,26 @@ class Authentication {
     }
   }
 
-  async validateToken(token:string){
-    if(!token){
-      return {
-        statusCode:httpStatusCode.clientError.UNAUTHORIZED,
-        message:errorLang.message.USER_NOT_AUTHENTICATED
+  async validateToken(token: string) {
+    try {
+      if (!token) {
+        return {
+          statusCode: httpStatusCode.clientError.UNAUTHORIZED,
+          message: errorLang.message.USER_NOT_AUTHENTICATED,
+        }
+      } else {
+        const decodedToken: any = await Jwt.verify(token, config.JWT_SECRET)
+        return decodedToken
       }
-    }else{
-      const result  = await Jwt.verify(token,config.JWT_SECRET);
-      return result
+    } catch (error) {
+      if (error instanceof TokenExpiredError) {
+        return {
+          statusCode: httpStatusCode.clientError.UNAUTHORIZED,
+          message: errorLang.message.TOKEN_EXPIRED,
+        }
+      }
+      throw error
     }
-
   }
 }
 
