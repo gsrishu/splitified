@@ -75,4 +75,17 @@ const loginUser = async (userName: string, password: string) => {
     return error
   }
 }
-export { userModel, getUserId, insertUser, checkUser, loginUser }
+const getMember = async(id:string)=>{
+
+   try{
+    const result  = await userModel.findOne({_id:id})
+    if(!_.isEmpty(result)){
+      return result._id
+    }else{
+      return null
+    }
+   }catch(error){
+      return error
+   }
+}
+export { userModel, getUserId, insertUser, checkUser, loginUser, getMember }
