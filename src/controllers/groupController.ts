@@ -35,4 +35,19 @@ export class groupController {
       return await GroupService.addMembers(members, userName, groupId)
     }
   }
+
+  static async deleteMember(request:Imembers){
+
+    const {error} = addMemberValiditor.validate(request)
+    if(error){
+      return{
+        statusCode: httpStatusCode.clientError.BAD_REQUEST,
+        message:error.details[0].message
+      }
+  
+    }
+    const members = request.members
+    const groupId = request.groupId
+    return await GroupService.deleteMember(members,groupId)
+  }
 }
