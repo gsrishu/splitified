@@ -69,4 +69,12 @@ groupRouter.post(
     res.send(result)
   },
 )
+groupRouter.post(
+  '/delete-member',
+  validateTokenMiddleware,
+  async (res, req) => {
+    const result = await groupController.deleteMember(res.body)
+    req.send(result)
+  },
+)
 export default groupRouter

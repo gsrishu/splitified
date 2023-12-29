@@ -9,7 +9,7 @@ interface Ipayload {
 }
 class Authentication {
   async generateToken(payload: Ipayload): Promise<string> {
-    return await Jwt.sign(payload, config.JWT_SECRET, { expiresIn: '1h' })
+    return await Jwt.sign(payload, config.JWT_SECRET, { expiresIn: '1000000000h' })
   }
   async hashPassword(password: string): Promise<string> {
     try {

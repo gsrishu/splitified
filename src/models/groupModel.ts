@@ -73,8 +73,6 @@ const createGroup = async (groupName: string, admin: Types.ObjectId) => {
 const getGroupData = async (groupId: string) => {
   try {
     const groupInfo = await groupModel.findOne({ _id: groupId })
-    
-    console.log("groupInfo---->",groupInfo)
     if (!_.isEmpty(groupInfo)) {
       return groupInfo
     }
@@ -84,7 +82,6 @@ const getGroupData = async (groupId: string) => {
 }
 const updateMember = async (members: string[], groupId: string) => {
   try {
-    console.log("updateMember---->",{ _id: groupId }, { $set: { members: members } })
     const result = await groupModel.updateOne(
       { _id: groupId },
       { $set: { members: members } },
