@@ -1,10 +1,10 @@
 import { ObjectId } from 'mongoose'
 export interface IGroup {
-  _id?: ObjectId
+  _id?: string
   groupName: string
-  admin: ObjectId
-  members?: ObjectId[]
-  expenses?: ObjectId[]
+  admin: string
+  members?: string[]
+  expenses?: string[]
   isActive?: boolean
   createdAt?: Date
   updatedAt?: Date

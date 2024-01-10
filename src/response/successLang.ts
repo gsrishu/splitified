@@ -6,5 +6,6 @@ export const successResponse = {
     SIGNUP_SUCCESSFULLY: 'Signup successfully',
     MEMBER_ADDED_SUCCESSFULLY: (num: number) => `${num} Member added`,
     MEMBER_DELETED_SUCCESSFULLY: (num: number) => `${num} Member deleted`,
+    ADD_EXPENSE_SUCCESS: 'Expenses added to the group successfully'
   },
 }

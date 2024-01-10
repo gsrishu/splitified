@@ -1,4 +1,4 @@
-import { httpStatusCode } from "./httpStatusCode"
+import { httpStatusCode } from './httpStatusCode'
 
 export const errorLang = {
   service: {
@@ -22,13 +22,18 @@ export const errorLang = {
     MEMBERS_ALREADY_EXISTS: 'Members already existes',
     UNABLE_TO_UPDATE_MEMBER: 'Unable to process update member',
     NO_MEMBER_AVAILABLE_TO_DELETE: 'No member available to delete',
-   
+    NOT_VALID_GROUP: 'Not a valid group',
+    INVALID_EXPENSE_MEMBERS: 'Invalid expense members or creditor',
+    TOTAL_NOT_EQUAL_TO_SHARES: 'Total is not equal to shares',
+    CREDITOR_NOT_IN_GROUP: 'Creditor is not part of the group',
+    ADD_EXPENSE_FAILED:
+      'Something went wrong while adding expenses to the group',
   },
-  commonErrorReturn(){
-    return{
-      statusCode:httpStatusCode.serverError.SERVICE_UNAVAILABLE,
-      success:false,
+  commonErrorReturn() {
+    return {
+      statusCode: httpStatusCode.serverError.SERVICE_UNAVAILABLE,
+      success: false,
       Message: 'Something went wrong',
     }
-  }
+  },
 }

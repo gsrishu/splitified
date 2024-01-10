@@ -37,7 +37,7 @@ import { group } from 'console'
  *               example
  *                 message: Group created successfully
  */
-const validateTokenMiddleware = async (req: any, res: any, next: any) => {
+export const validateTokenMiddleware = async (req: any, res: any, next: any) => {
   const token = req.headers.jwt_token as string
   const tokenResult = await Authentication.validateToken(token)
   if (tokenResult.statusCode === 401) {
