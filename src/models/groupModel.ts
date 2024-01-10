@@ -1,28 +1,30 @@
-import mongoose, { ObjectId, Schema, Types } from 'mongoose'
+import mongoose, { Schema, Types } from 'mongoose'
 import { IGroup } from '../interface/GroupInterface'
 import _ from 'lodash'
+const { v4: uuidv4 } = require('uuid')
 const groupSchema: Schema<IGroup> = new mongoose.Schema({
   _id: {
-    type: Types.ObjectId,
-    default: new Types.ObjectId(),
+    type: String,
+    default: uuidv4,
+    unique: true,
   },
   groupName: {
     type: String,
     required: true,
   },
   admin: {
-    type: Types.ObjectId,
+    type: String,
     require: true,
   },
   members: [
     {
-      type: Types.ObjectId,
+      type: String,
       default: [],
     },
   ],
   expenses: [
     {
-      type: Types.ObjectId,
+      type: String,
       default: [],
     },
   ],
@@ -31,11 +33,11 @@ const groupSchema: Schema<IGroup> = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: new Date(),
+    default: Date.now,
   },
 })
 
@@ -43,7 +45,7 @@ const groupModel = mongoose.model<IGroup>('group', groupSchema)
 
 const isGroupExists = async (
   groupName: string,
-  admin: Types.ObjectId,
+  admin: string,
 ): Promise<boolean> => {
   try {
     const groupExists = await groupModel.findOne({
@@ -54,7 +56,7 @@ const isGroupExists = async (
     throw error
   }
 }
-const createGroup = async (groupName: string, admin: Types.ObjectId) => {
+const createGroup = async (groupName: string, admin: string) => {
   try {
     const groupData = new groupModel({
       groupName: groupName,
@@ -72,7 +74,9 @@ const createGroup = async (groupName: string, admin: Types.ObjectId) => {
 
 const getGroupData = async (groupId: string) => {
   try {
-    const groupInfo = await groupModel.findOne({ _id: groupId })
+    const groupInfo = await groupModel.findOne({
+      _id: groupId,
+    })
     if (!_.isEmpty(groupInfo)) {
       return groupInfo
     }
@@ -92,5 +96,27 @@ const updateMember = async (members: string[], groupId: string) => {
     throw error
   }
 }
-
-export { groupModel, createGroup, isGroupExists, getGroupData, updateMember }
+const updateExpense = async (groupId: string, expenseId: string) => {
+  try {
+    const selectGroup = await groupModel
+      .findOne({ _id: groupId })
+      .select('expenses')
+    const expenseArray = selectGroup?.expenses || []
+    expenseArray.push(expenseId)
+    const updateGroup = await groupModel.updateOne(
+      { _id: groupId },
+      { $set: { expenses: expenseArray } },
+    )
+    return updateGroup
+  } catch (error) {
+    throw error
+  }
+}
+export {
+  groupModel,
+  createGroup,
+  isGroupExists,
+  getGroupData,
+  updateMember,
+  updateExpense,
+}

@@ -16,3 +16,7 @@ export interface ILogin{
     message:string,
     authToken?:string
 }
+export interface IDate{
+    createdAt?: Date
+    updatedAt?: Date
+}

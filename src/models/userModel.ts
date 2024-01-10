@@ -2,7 +2,13 @@ import mongoose, { Schema } from 'mongoose'
 import { IUser } from '../interface/UserInterface'
 import authObj from '../authentication/auth'
 import * as _ from 'lodash'
+const { v4: uuidv4 } = require('uuid');
 const userSchema: Schema<IUser> = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: uuidv4,
+    unique: true
+  },
   userName: {
     type: String,
     required: true,
@@ -75,10 +81,10 @@ const loginUser = async (userName: string, password: string) => {
     return error
   }
 }
-const getMember = async(id:string)=>{
+const getMember = async(userId:string)=>{
 
    try{
-    const result  = await userModel.findOne({_id:id})
+    const result  = await userModel.findOne({_id:userId})
     if(!_.isEmpty(result)){
       return result._id
     }else{
