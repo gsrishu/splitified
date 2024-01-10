@@ -28,6 +28,12 @@ const groupSchema: Schema<IGroup> = new mongoose.Schema({
       default: [],
     },
   ],
+  settle: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
   isActive: {
     type: Boolean,
   },

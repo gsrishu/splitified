@@ -6,6 +6,7 @@ const swagger = require('../swagger/swaggerConfig')
 import expenseRoutes from '../src/routes/expenseRoutes'
 import userRouter from '../src/routes/userRoutes'
 import groupRouter from '../src/routes/groupRoutes'
+import memberRouter from './routes/memberRouter';
 const app = express()
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
@@ -15,6 +16,7 @@ app.use(bodyParser.json())
 app.use('/expense', expenseRoutes)
 app.use('/user', userRouter)
 app.use('/group',groupRouter)
+app.use('/member',memberRouter)
 swagger(app)
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))

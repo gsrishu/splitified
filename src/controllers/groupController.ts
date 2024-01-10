@@ -1,8 +1,8 @@
 import { GroupService } from '../services/groupService'
-import { IGroup, Imembers } from '../interface/GroupInterface'
+import { IGroup, IDeleteGroup } from '../interface/GroupInterface'
 import {
   createGroupValidator,
-  addMemberValiditor,
+  deleteMemberValiditor,
 } from '../validitor/groupValidator'
 import { httpStatusCode } from '../response'
 
@@ -21,33 +21,10 @@ export class groupController {
     }
   }
 
-  static async addMembers(request: Imembers, tokenData: any) {
-    const { error } = addMemberValiditor.validate(request)
-    if (error) {
-      return {
-        statusCode: httpStatusCode.clientError.BAD_REQUEST,
-        message: error.details[0].message,
-      }
-    } else {
-      const members = request.members
-      const userName = tokenData.userName
-      const groupId = request.groupId
-      return await GroupService.addMembers(members, userName, groupId)
-    }
-  }
-
-  static async deleteMember(request:Imembers){
-
-    const {error} = addMemberValiditor.validate(request)
-    if(error){
-      return{
-        statusCode: httpStatusCode.clientError.BAD_REQUEST,
-        message:error.details[0].message
-      }
-  
-    }
-    const members = request.members
-    const groupId = request.groupId
-    return await GroupService.deleteMember(members,groupId)
+  static async deleteGroup(request: IDeleteGroup) {
+    const { groupId, memberId } = request
+    const { error } = deleteMemberValiditor.validate({ groupId, memberId })
+    return error
   }
 }
+

@@ -23,6 +23,7 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
     type: String,
     required: true,
   },
+  
 })
 const userModel = mongoose.model<IUser>('User', userSchema)
 
