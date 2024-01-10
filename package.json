@@ -1,15 +1,17 @@
 {
-  "name": "splitwise-clone",
+  "name": "splitified",
   "version": "1.0.0",
   "description": "Expense Tracker is a web application that helps you track expenses and simplify group payments. It allows users to create groups, add expenses, and settle debts within the group efficiently.",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "ts-node src/index.ts",
+    "start": "ts-node src/index.ts format",
     "dev": "nodemon --exec  ts-node ./src/index.ts print-swagger-url",
     "watch-ts": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
-    "print-swagger-url": "node -e \"console.log('Swagger Docs URL: http://localhost:3000/api-docs')\""
+    "print-swagger-url": "node -e \"console.log('Swagger Docs URL: http://localhost:3000/api-docs')\"",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "check-format": "prettier --check \"**/*.{ts,tsx}\""
   },
   "repository": {
     "type": "git",
@@ -22,22 +24,35 @@
   },
   "homepage": "https://github.com/gsrishu/splitwise-backend#readme",
   "dependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.10.5",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
     "mongoose": "^8.0.3",
     "node": "^21.2.0",
     "path": "^0.12.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/lodash": "^4.14.202",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
+    "@types/uuid": "^9.0.7",
     "npx": "^10.2.2",
     "open": "^10.0.0",
+    "prettier": "3.1.1",
     "ts-node": "^10.9.2"
   }
 }

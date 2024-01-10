@@ -1,29 +1,18 @@
-import express from 'express';
-
-const expenseRouter = express.Router();
-/**
- * @swagger
- * tags:
- *   - name: Expenses
- *     description: Operations related to expenses
- * paths:
- *   /api/expenses:
- *     get:
- *       summary: Get all expenses
- *       description: Retrieve a list of all expenses
- *       tags:
- *         - Expenses
- *       responses:
- *         '200':
- *           description: Successful response
- *           content:
- *             application/json:
- *               example:
- *                 message: Expenses retrieved successfully
- */
+import express from 'express'
+import { validateTokenMiddleware } from './groupRoutes'
+import { ExpenseController } from '../controllers/expenseController'
+const expenseRouter = express.Router()
 expenseRouter.get('/expenses', (req, res) => {
-  res.send('Get all expenses');
-});
+  res.send('Get all expenses')
+})
 
-export default expenseRouter;
- 
+expenseRouter.post(
+  '/add-expense',
+  validateTokenMiddleware,
+  async (req: any, res) => {
+    const result = await ExpenseController.addExpense(req.body)
+    res.send(result)
+  },
+)
+
+export default expenseRouter
