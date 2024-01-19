@@ -16,5 +16,4 @@ export interface Imembers {
 
 export interface IDeleteGroup {
   groupId: string
-  memberId: string
 }

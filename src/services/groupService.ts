@@ -1,6 +1,8 @@
 import {
   isGroupExists,
   createGroup as createGroupModel,
+  getGroupData,
+  deleteGroup as deleteGroupModel,
 } from '../models/groupModel'
 import _ from 'lodash'
 import { IReturn } from '../interface/CommonInterface'
@@ -11,6 +13,7 @@ import {
   splitifiedError,
 } from '../response/index'
 import { getUserId } from '../models/userModel'
+import { IGroup } from '../interface/GroupInterface'
 export class GroupService {
   static async createGroup(
     groupName: string,
@@ -50,6 +53,51 @@ export class GroupService {
       )
       console.info(customError)
       throw error
+    }
+  }
+
+  static async deleteGroup(groupId: string, userId: string) {
+    try {
+      const groupInfo = (await getGroupData(groupId)) as IGroup
+
+      if (_.isEmpty(groupInfo)) {
+        return {
+          statusCode: httpStatusCode.success.NO_CONTENT,
+          success: true,
+          message: errorLang.message.NOT_VALID_GROUP,
+        }
+      }
+      const isSettled = groupInfo.members?.length === groupInfo.settle?.length
+
+      if (!isSettled) {
+        return {
+          statusCode: httpStatusCode.success.NO_CONTENT,
+          success: false,
+          message: errorLang.message.NOT_EVERY_MEMBER_SETTLED_ON_THE_GROUP,
+        }
+      }
+
+      const result = await deleteGroupModel(groupId)
+
+      return result
+        ? {
+            statusCode: httpStatusCode.success.OK,
+            success: true,
+            message: successResponse.message.GROUP_DELETED,
+          }
+        : {
+            statusCode: httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: errorLang.message.DELETE_GROUP_ERROR,
+          }
+          
+    } catch (error) {
+      console.error(error)
+      return {
+        statusCode: httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: errorLang.message.INTERNAL_SERVER_ERROR,
+      }
     }
   }
 }

@@ -25,6 +25,7 @@ groupRouter.post(
   '/create-group',
   validateTokenMiddleware,
   async (req: any, res) => {
+  
     const result = await groupController.createGroup(req.body, req.tokenResult)
     res.send(result)
   },
@@ -33,8 +34,7 @@ groupRouter.post(
   '/delete-group',
   validateTokenMiddleware,
   async (req: any, res) => {
-    console.log(req,"req.params")
-    const result = await groupController.deleteGroup( req.query)
+    const result = await groupController.deleteGroup(req.query,req.tokenResult)
     res.send(result)
   },
 )

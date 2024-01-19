@@ -5,15 +5,12 @@ import {
   deleteMemberValiditor,
 } from '../validitor/groupValidator'
 import { httpStatusCode } from '../response'
-
+import { validateReturn } from '../util/index'
 export class groupController {
   static async createGroup(request: IGroup, tokenData: any) {
     const { error } = createGroupValidator.validate(request)
     if (error) {
-      return {
-        statusCode: httpStatusCode.clientError.BAD_REQUEST,
-        message: error.details[0].message,
-      }
+      return validateReturn(error)
     } else {
       const groupName = request.groupName
       const userName = tokenData.userName
@@ -21,10 +18,15 @@ export class groupController {
     }
   }
 
-  static async deleteGroup(request: IDeleteGroup) {
-    const { groupId, memberId } = request
-    const { error } = deleteMemberValiditor.validate({ groupId, memberId })
-    return error
+  static async deleteGroup(request: IDeleteGroup,tokenData:any) {
+    const { groupId } = request
+    console.log("groupIdgroupId",groupId,request)
+    const userId = tokenData.userId
+    const { error } = deleteMemberValiditor.validate({ groupId })
+    if (error) {
+      return validateReturn(error)
+    }
+    const result = await GroupService.deleteGroup(groupId,userId)
+    return result
   }
 }
-

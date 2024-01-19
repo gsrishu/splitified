@@ -48,8 +48,8 @@ export class userService {
 
   static async login(userName: string, password: string): Promise<ILogin> {
     try {
-      const result = await loginUser(userName, password)
-      if (!result) {
+      const result:any = await loginUser(userName, password)
+      if (!result.pwdCompare) {
         const loginError = new splitifiedError(
           errorLang.message.INCORRECT_DETAILS,
           404,
@@ -61,6 +61,8 @@ export class userService {
         try {
           const toeknResult = await authObj.generateToken({
             userName: userName,
+            userId:result.userId
+
           })
           return {
             statusCode: httpStatusCode.success.OK,
