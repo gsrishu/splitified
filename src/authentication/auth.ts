@@ -6,6 +6,7 @@ import { httpStatusCode, errorLang } from '../response/index'
 import { NextFunction } from 'express'
 interface Ipayload {
   userName: string
+  userId:string
 }
 class Authentication {
   async generateToken(payload: Ipayload): Promise<string> {

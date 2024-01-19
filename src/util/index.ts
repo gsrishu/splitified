@@ -1,4 +1,4 @@
-
+import { httpStatusCode } from "../response"
 
 export function returnFunction(httpCode:number,status:boolean,message:string){
 
@@ -8,4 +8,12 @@ export function returnFunction(httpCode:number,status:boolean,message:string){
         message: message,
       }
 
+}
+
+export function validateReturn(error:any){
+
+  return{
+    statusCode:httpStatusCode.clientError.BAD_REQUEST,
+    message:error.details[0].message
+  }
 }

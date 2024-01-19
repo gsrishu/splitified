@@ -7,7 +7,6 @@ const expenseSchema = new mongoose.Schema<IExpenseModel>({
   _id: {
     type: String,
     default: uuidv4,
-    unique: true,
   },
   groupId: {
     type: String,

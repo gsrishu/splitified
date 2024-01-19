@@ -2,8 +2,7 @@ import {
   isGroupExists,
   createGroup as createGroupModel,
   getGroupData,
-  updateMember,
-  groupModel,
+  deleteGroup as deleteGroupModel,
 } from '../models/groupModel'
 import _ from 'lodash'
 import { IReturn } from '../interface/CommonInterface'
@@ -13,7 +12,7 @@ import {
   errorLang,
   splitifiedError,
 } from '../response/index'
-import { getUserId, getMember } from '../models/userModel'
+import { getUserId } from '../models/userModel'
 import { IGroup } from '../interface/GroupInterface'
 export class GroupService {
   static async createGroup(
@@ -56,109 +55,49 @@ export class GroupService {
       throw error
     }
   }
-  static async checkValidMembers(members: string[]) {
-    const filterMember = await Promise.all(
-      members.map(async (member) => {
-        const result = await getMember(member)
 
-        return result ? result : null
-      }),
-    )
-    const validMembers = filterMember.filter((member) => member !== null)
-    return validMembers
-  }
-  static async getGroupInfo(groupId: string, validMembers: string[]) {
-    const groupInfo = (await getGroupData(groupId)) as IGroup
-    if (groupInfo) {
-      let removeDuplicateMember = validMembers.filter((members: any) => {
-        return groupInfo.members && !groupInfo.members.includes(members)
-      })
-      if (_.isEmpty(removeDuplicateMember)) {
-        return false
-      }
-      return { members: removeDuplicateMember, group: groupInfo }
-    }
-  }
-  static async addMembers(members: string[], userId: string, groupId: string) {
+  static async deleteGroup(groupId: string, userId: string) {
     try {
-      const validMembers: any = await this.checkValidMembers(members)
-      let removeDuplicateMember: any = await this.getGroupInfo(
-        groupId,
-        validMembers,
-      )
-      if (removeDuplicateMember === false) {
+      const groupInfo = (await getGroupData(groupId)) as IGroup
+
+      if (_.isEmpty(groupInfo)) {
         return {
-          statusCode: httpStatusCode.clientError.BAD_REQUEST,
+          statusCode: httpStatusCode.success.NO_CONTENT,
           success: true,
-          message: errorLang.message.MEMBERS_ALREADY_EXISTS,
+          message: errorLang.message.NOT_VALID_GROUP,
         }
       }
-      removeDuplicateMember = [
-        ...removeDuplicateMember.members,
-        ...(removeDuplicateMember.group.members || []),
-      ]
-      const insertMember = await updateMember(removeDuplicateMember, groupId)
+      const isSettled = groupInfo.members?.length === groupInfo.settle?.length
 
-      if (insertMember > 0) {
+      if (!isSettled) {
         return {
-          statusCode: httpStatusCode.success.OK,
-          success: true,
-          message:
-            successResponse.message.MEMBER_ADDED_SUCCESSFULLY(insertMember),
+          statusCode: httpStatusCode.success.NO_CONTENT,
+          success: false,
+          message: errorLang.message.NOT_EVERY_MEMBER_SETTLED_ON_THE_GROUP,
         }
       }
 
-      return {
-        statusCode: httpStatusCode.serverError.SERVICE_UNAVAILABLE,
-        success: false,
-        message: errorLang.message.UNABLE_TO_UPDATE_MEMBER,
-      }
-    } catch (error: any) {
-      const errorInfo = new splitifiedError(
-        error.message,
-        error.code,
-        errorLang.process.addMembers,
-        errorLang.service.groupService,
-      )
-      console.info(errorInfo)
-      return errorLang.commonErrorReturn()
-    }
-  }
-  static async deleteMember(members: string[], groupId: string) {
-    /** Todo: chack the member borrow to someone if no then the admin can delete the member*/
-    try {
-      const validMembers = await this.checkValidMembers(members)
-      const getGroupInfo: any = await getGroupData(groupId)
-      const filterData = Array.isArray(getGroupInfo.members)
-        ? getGroupInfo.members.filter(
-            (member: any) => member.toString() !== validMembers[0]?.toString(),
-          )
-        : []
-      if (filterData.length < getGroupInfo.members.length) {
-        const result = await updateMember(filterData, groupId)
-        if (result > 0) {
-          return {
+      const result = await deleteGroupModel(groupId)
+
+      return result
+        ? {
             statusCode: httpStatusCode.success.OK,
             success: true,
-            message:
-              successResponse.message.MEMBER_DELETED_SUCCESSFULLY(result),
+            message: successResponse.message.GROUP_DELETED,
           }
-        }
-      }
+        : {
+            statusCode: httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: errorLang.message.DELETE_GROUP_ERROR,
+          }
+          
+    } catch (error) {
+      console.error(error)
       return {
-        statusCode: httpStatusCode.clientError.NOT_FOUND,
+        statusCode: httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
         success: false,
-        message: errorLang.message.NO_MEMBER_AVAILABLE_TO_DELETE,
+        message: errorLang.message.INTERNAL_SERVER_ERROR,
       }
-    } catch (error: any) {
-      const errorDetails = new splitifiedError(
-        error.message,
-        error.statusCode,
-        errorLang.service.groupService,
-        errorLang.service.groupService,
-      )
-      console.info(errorDetails)
-      return await errorLang.commonErrorReturn()
     }
   }
 }

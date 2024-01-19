@@ -1,19 +1,16 @@
 import { GroupService } from '../services/groupService'
-import { IGroup, Imembers } from '../interface/GroupInterface'
+import { IGroup, IDeleteGroup } from '../interface/GroupInterface'
 import {
   createGroupValidator,
-  addMemberValiditor,
+  deleteMemberValiditor,
 } from '../validitor/groupValidator'
 import { httpStatusCode } from '../response'
-
+import { validateReturn } from '../util/index'
 export class groupController {
   static async createGroup(request: IGroup, tokenData: any) {
     const { error } = createGroupValidator.validate(request)
     if (error) {
-      return {
-        statusCode: httpStatusCode.clientError.BAD_REQUEST,
-        message: error.details[0].message,
-      }
+      return validateReturn(error)
     } else {
       const groupName = request.groupName
       const userName = tokenData.userName
@@ -21,33 +18,15 @@ export class groupController {
     }
   }
 
-  static async addMembers(request: Imembers, tokenData: any) {
-    const { error } = addMemberValiditor.validate(request)
+  static async deleteGroup(request: IDeleteGroup,tokenData:any) {
+    const { groupId } = request
+    console.log("groupIdgroupId",groupId,request)
+    const userId = tokenData.userId
+    const { error } = deleteMemberValiditor.validate({ groupId })
     if (error) {
-      return {
-        statusCode: httpStatusCode.clientError.BAD_REQUEST,
-        message: error.details[0].message,
-      }
-    } else {
-      const members = request.members
-      const userName = tokenData.userName
-      const groupId = request.groupId
-      return await GroupService.addMembers(members, userName, groupId)
+      return validateReturn(error)
     }
-  }
-
-  static async deleteMember(request:Imembers){
-
-    const {error} = addMemberValiditor.validate(request)
-    if(error){
-      return{
-        statusCode: httpStatusCode.clientError.BAD_REQUEST,
-        message:error.details[0].message
-      }
-  
-    }
-    const members = request.members
-    const groupId = request.groupId
-    return await GroupService.deleteMember(members,groupId)
+    const result = await GroupService.deleteGroup(groupId,userId)
+    return result
   }
 }
