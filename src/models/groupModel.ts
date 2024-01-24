@@ -131,14 +131,28 @@ const deleteGroup = async (groupId: string) => {
 }
 const listGroup = async (userId: string) => {
   try {
-    const getAllGroup = await groupModel.find({
-      $and: [
-        { isActive: true },
-        { $or: [{ admin: userId }, { members: userId }] },
-      ],
-    }).lean()
+    const getAllGroup = await groupModel
+      .find({
+        $and: [
+          { isActive: true },
+          { $or: [{ admin: userId }, { members: userId }] },
+        ],
+      })
+      .lean()
     return getAllGroup
   } catch (error) {
+    return error
+  }
+}
+const memberList = async (groupId: string) => {
+  try{
+    let result:any = await groupModel.find({_id:groupId}).lean()
+    if(!_.isEmpty(result)){   
+      result = result[0].members
+    }
+    return result
+
+  }catch(error){
     return error
   }
 }
@@ -150,5 +164,6 @@ export {
   updateMember,
   updateExpense,
   deleteGroup,
-  listGroup
+  listGroup,
+  memberList
 }

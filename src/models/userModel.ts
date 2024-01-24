@@ -25,13 +25,13 @@ const userSchema: Schema<IUser> = new mongoose.Schema({
 })
 const userModel = mongoose.model<IUser>('User', userSchema)
 
-const getUserId = async (userName: string) => {
+const getUserId = async (userId: string) => {
   try {
-    const userId = await userModel.findOne({
-      userName: userName,
+    const userIdData = await userModel.findOne({
+      _id: userId,
     })
-    if (!_.isEmpty(userId)) {
-      return _.get(userId, '_id')
+    if (!_.isEmpty(userIdData)) {
+      return _.get(userIdData, '_id')
     }
   } catch (error) {
     throw error

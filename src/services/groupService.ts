@@ -91,7 +91,7 @@ export class GroupService {
             success: false,
             message: errorLang.message.DELETE_GROUP_ERROR,
           }
-    } catch (error: any) {
+    } catch (error:any) {
       const customError = new splitifiedError(
         error.message,
         error.code,
@@ -99,8 +99,8 @@ export class GroupService {
         errorLang.service.groupService,
       )
       console.info(customError)
-    }
   }
+}
 
   static async getAllGroup(userId: string) {
     try {
@@ -115,7 +115,7 @@ export class GroupService {
 
       const allGroup = await listGroup(userId)
       return allGroup
-    } catch (error: any) {
+    } catch (error:any) {
       const customError = new splitifiedError(
         error.message,
         error.code,
@@ -125,5 +125,6 @@ export class GroupService {
       console.info(customError)
       throw error
     }
+    }
   }
-}
+

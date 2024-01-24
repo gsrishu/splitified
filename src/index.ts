@@ -8,7 +8,6 @@ import userRouter from '../src/routes/userRoutes'
 import groupRouter from '../src/routes/groupRoutes'
 import memberRouter from './routes/memberRouter';
 const app = express()
-const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 mongoose.connect('mongodb://localhost:27017/splitwise')
 

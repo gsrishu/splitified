@@ -3,9 +3,7 @@ import { TokenExpiredError } from 'jsonwebtoken'
 import { config } from '../config'
 import bcrypt from 'bcrypt'
 import { httpStatusCode, errorLang } from '../response/index'
-import { NextFunction } from 'express'
 interface Ipayload {
-  userName: string
   userId:string
 }
 class Authentication {

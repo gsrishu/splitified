@@ -1,4 +1,4 @@
-import { getGroupData, updateMember } from '../models/groupModel'
+import { getGroupData, updateMember, memberList } from '../models/groupModel'
 import _ from 'lodash'
 import {
   successResponse,
@@ -107,8 +107,23 @@ export class MemberService {
       const errorDetails = new splitifiedError(
         error.message,
         error.statusCode,
-        errorLang.service.groupService,
-        errorLang.service.groupService,
+        errorLang.service.memberService,
+        errorLang.process.deleteMember,
+      )
+      console.info(errorDetails)
+      return await errorLang.commonErrorReturn()
+    }
+  }
+  static async getAllMember(groupId: string) {
+    try {
+      const allmembers = memberList(groupId)
+      return allmembers
+    } catch (error: any) {
+      const errorDetails = new splitifiedError(
+        error.message,
+        error.statusCode,
+        errorLang.process.getAllMember,
+        errorLang.service.memberService,
       )
       console.info(errorDetails)
       return await errorLang.commonErrorReturn()

@@ -20,4 +20,13 @@ memberRouter.post(
     res.send(result)
   },
 )
+memberRouter.get(
+  '/get-all-member',
+  validateTokenMiddleware,
+  async (req: any, res) => {
+    const { groupId } = req.query
+    const result = await MemberController.getAllMember(groupId)
+    res.send(result)
+  },
+)
 export default memberRouter
