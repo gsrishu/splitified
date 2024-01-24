@@ -2,7 +2,8 @@ import {
   isGroupExists,
   createGroup as createGroupModel,
   getGroupData,
-  deleteGroup as deleteGroupModel,
+  deleteGroup,
+  listGroup,
 } from '../models/groupModel'
 import _ from 'lodash'
 import { IReturn } from '../interface/CommonInterface'
@@ -12,7 +13,7 @@ import {
   errorLang,
   splitifiedError,
 } from '../response/index'
-import { getUserId } from '../models/userModel'
+import { getUserId, getMember } from '../models/userModel'
 import { IGroup } from '../interface/GroupInterface'
 export class GroupService {
   static async createGroup(
@@ -77,7 +78,7 @@ export class GroupService {
         }
       }
 
-      const result = await deleteGroupModel(groupId)
+      const result = await deleteGroup(groupId)
 
       return result
         ? {
@@ -90,14 +91,39 @@ export class GroupService {
             success: false,
             message: errorLang.message.DELETE_GROUP_ERROR,
           }
-          
-    } catch (error) {
-      console.error(error)
-      return {
-        statusCode: httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
-        success: false,
-        message: errorLang.message.INTERNAL_SERVER_ERROR,
+    } catch (error: any) {
+      const customError = new splitifiedError(
+        error.message,
+        error.code,
+        errorLang.process.deleteGroup,
+        errorLang.service.groupService,
+      )
+      console.info(customError)
+    }
+  }
+
+  static async getAllGroup(userId: string) {
+    try {
+      const checkValidUserId = await getMember(userId)
+      if (_.isEmpty(checkValidUserId)) {
+        return {
+          statusCode: httpStatusCode.clientError.BAD_REQUEST,
+          success: true,
+          message: errorLang.message.USER_NOT_FOUND,
+        }
       }
+
+      const allGroup = await listGroup(userId)
+      return allGroup
+    } catch (error: any) {
+      const customError = new splitifiedError(
+        error.message,
+        error.code,
+        errorLang.process.getAllGroup,
+        errorLang.service.groupService,
+      )
+      console.info(customError)
+      throw error
     }
   }
 }

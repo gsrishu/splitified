@@ -10,6 +10,8 @@ export const errorLang = {
     login: 'login',
     createGroup: 'createGroup',
     addMembers: 'addMembers',
+    getAllGroup:'getAllGroup',
+    deleteGroup:'deleteGroup'
   },
   message: {
     USER_ALREADY_EXISTS: 'user already exists',

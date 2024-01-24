@@ -12,3 +12,6 @@ export const addMemberValiditor = Joi.object({
 export const deleteMemberValiditor = Joi.object({
   groupId: Joi.string().required(),
 })
+export const getAllGroupValiditor = Joi.object({
+  userId: Joi.string().required()
+})
