@@ -38,4 +38,10 @@ groupRouter.post(
     res.send(result)
   },
 )
+groupRouter.get('/get-all-group',validateTokenMiddleware,async(req:any,res)=>{
+
+  const result = await groupController.getAllGroup(req.tokenResult);
+
+  res.send(result)
+})
 export default groupRouter
