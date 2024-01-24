@@ -60,7 +60,6 @@ export class userService {
       } else {
         try {
           const toeknResult = await authObj.generateToken({
-            userName: userName,
             userId:result.userId
 
           })

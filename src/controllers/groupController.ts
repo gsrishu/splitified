@@ -5,7 +5,6 @@ import {
   deleteMemberValiditor,
   getAllGroupValiditor,
 } from '../validitor/groupValidator'
-import { httpStatusCode } from '../response'
 import { validateReturn } from '../util/index'
 export class groupController {
   static async createGroup(request: IGroup, tokenData: any) {
@@ -14,14 +13,13 @@ export class groupController {
       return validateReturn(error)
     } else {
       const groupName = request.groupName
-      const userName = tokenData.userName
-      return await GroupService.createGroup(groupName, userName)
+      const userId = tokenData.userId
+      return await GroupService.createGroup(groupName, userId)
     }
   }
 
   static async deleteGroup(request: IDeleteGroup, tokenData: any) {
     const { groupId } = request
-    console.log('groupIdgroupId', groupId, tokenData)
     const userId = tokenData.userId
     const { error } = deleteMemberValiditor.validate({ groupId })
     if (error) {

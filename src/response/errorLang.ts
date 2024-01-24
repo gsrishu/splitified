@@ -4,14 +4,17 @@ export const errorLang = {
   service: {
     userservice: 'userService',
     groupService: 'groupService',
+    memberService: 'memberService',
   },
   process: {
     signup: 'signup',
     login: 'login',
     createGroup: 'createGroup',
     addMembers: 'addMembers',
-    getAllGroup:'getAllGroup',
-    deleteGroup:'deleteGroup'
+    getAllGroup: 'getAllGroup',
+    deleteGroup: 'deleteGroup',
+    deleteMember: 'deleteMember',
+    getAllMember: 'getAllMember',
   },
   message: {
     USER_ALREADY_EXISTS: 'user already exists',
