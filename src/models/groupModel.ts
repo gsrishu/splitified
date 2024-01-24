@@ -6,7 +6,6 @@ const groupSchema: Schema<IGroup> = new mongoose.Schema({
   _id: {
     type: String,
     default: uuidv4,
-    unique: true,
   },
   groupName: {
     type: String,
@@ -23,6 +22,12 @@ const groupSchema: Schema<IGroup> = new mongoose.Schema({
     },
   ],
   expenses: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
+  settle: [
     {
       type: String,
       default: [],
@@ -80,6 +85,7 @@ const getGroupData = async (groupId: string) => {
     if (!_.isEmpty(groupInfo)) {
       return groupInfo
     }
+    return false
   } catch (error) {
     return error
   }
@@ -112,6 +118,44 @@ const updateExpense = async (groupId: string, expenseId: string) => {
     throw error
   }
 }
+const deleteGroup = async (groupId: string) => {
+  try {
+    const deleteGroupResult = await groupModel.updateOne(
+      { _id: groupId },
+      { isActive: false },
+    )
+    return deleteGroupResult
+  } catch (error) {
+    return error
+  }
+}
+const listGroup = async (userId: string) => {
+  try {
+    const getAllGroup = await groupModel
+      .find({
+        $and: [
+          { isActive: true },
+          { $or: [{ admin: userId }, { members: userId }] },
+        ],
+      })
+      .lean()
+    return getAllGroup
+  } catch (error) {
+    return error
+  }
+}
+const memberList = async (groupId: string) => {
+  try{
+    let result:any = await groupModel.find({_id:groupId}).lean()
+    if(!_.isEmpty(result)){   
+      result = result[0].members
+    }
+    return result
+
+  }catch(error){
+    return error
+  }
+}
 export {
   groupModel,
   createGroup,
@@ -119,4 +163,7 @@ export {
   getGroupData,
   updateMember,
   updateExpense,
+  deleteGroup,
+  listGroup,
+  memberList
 }

@@ -4,12 +4,17 @@ export const errorLang = {
   service: {
     userservice: 'userService',
     groupService: 'groupService',
+    memberService: 'memberService',
   },
   process: {
     signup: 'signup',
     login: 'login',
     createGroup: 'createGroup',
     addMembers: 'addMembers',
+    getAllGroup: 'getAllGroup',
+    deleteGroup: 'deleteGroup',
+    deleteMember: 'deleteMember',
+    getAllMember: 'getAllMember',
   },
   message: {
     USER_ALREADY_EXISTS: 'user already exists',
@@ -28,6 +33,12 @@ export const errorLang = {
     CREDITOR_NOT_IN_GROUP: 'Creditor is not part of the group',
     ADD_EXPENSE_FAILED:
       'Something went wrong while adding expenses to the group',
+    NOT_A_VALID_GROUP: 'Not a valid group',
+    YOU_ARE_NOT_THE_ADMIN: 'You are not the admin of the group',
+    NOT_EVERY_MEMBER_SETTLED_ON_THE_GROUP:
+      'Not every member is settled in the group',
+    DELETE_GROUP_ERROR: 'Group delete error',
+    INTERNAL_SERVER_ERROR: 'Internal server error',
   },
   commonErrorReturn() {
     return {
