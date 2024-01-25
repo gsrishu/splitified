@@ -5,6 +5,7 @@ export const errorLang = {
     userservice: 'userService',
     groupService: 'groupService',
     memberService: 'memberService',
+    expenseService: 'expenseService'
   },
   process: {
     signup: 'signup',
@@ -15,6 +16,7 @@ export const errorLang = {
     deleteGroup: 'deleteGroup',
     deleteMember: 'deleteMember',
     getAllMember: 'getAllMember',
+    updateExpense: 'updateExpense',
   },
   message: {
     USER_ALREADY_EXISTS: 'user already exists',

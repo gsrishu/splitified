@@ -102,7 +102,7 @@ const updateMember = async (members: string[], groupId: string) => {
     throw error
   }
 }
-const updateExpense = async (groupId: string, expenseId: string) => {
+const updateGroupExpense = async (groupId: string, expenseId: string) => {
   try {
     const selectGroup = await groupModel
       .findOne({ _id: groupId })
@@ -162,7 +162,7 @@ export {
   isGroupExists,
   getGroupData,
   updateMember,
-  updateExpense,
+  updateGroupExpense,
   deleteGroup,
   listGroup,
   memberList
