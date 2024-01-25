@@ -1,5 +1,4 @@
-import { IExpense } from '../interface/expenseInterface'
-import { httpStatusCode } from '../response'
+import { IExpense,IUpdateExpense } from '../interface/expenseInterface'
 import {
   expenseValidator,
   updateExpenseValidator,
@@ -14,7 +13,7 @@ export class ExpenseController {
     }
     return ExpenseService.addExpense(request)
   }
-  static async updateExpense(request: any, userId: string) {
+  static async updateExpense(request:IUpdateExpense , userId: string) {
     const { error } = updateExpenseValidator.validate(request)
     if (error) {
       return validateReturn(error)

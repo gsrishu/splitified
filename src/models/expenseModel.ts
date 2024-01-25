@@ -1,5 +1,5 @@
 import mongoose, { Types } from 'mongoose'
-import { IExpense } from '../interface/expenseInterface'
+import { IExpense,IUpdateExpense } from '../interface/expenseInterface'
 import { updateGroupExpense } from './groupModel'
 import _ from 'lodash'
 const { v4: uuidv4 } = require('uuid')
@@ -74,8 +74,8 @@ const addExpense = async (expenseData: IExpense) => {
 }
 const updateExpense = async (
   name: string,
-  creditorShare: string,
-  borrower: [],
+  creditorShare: number,
+  borrower:IUpdateExpense["borrower"],
   total: number,
   expenseId: string,
   userId: string,

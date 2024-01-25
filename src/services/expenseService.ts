@@ -1,5 +1,5 @@
 import { IGroup } from '../interface/GroupInterface'
-import { IExpense } from '../interface/expenseInterface'
+import { IExpense,IUpdateExpense } from '../interface/expenseInterface'
 import { getGroupData } from '../models/groupModel'
 import { returnFunction } from '../util'
 import _ from 'lodash'
@@ -73,11 +73,11 @@ export class ExpenseService {
     }
   }
 
-  static async updateExpense(request: any, userId: string) {
+  static async updateExpense(request: IUpdateExpense, userId: string) {
     try {
       const { expenseId, name, creditorShare, borrower, total } = request
       const totalExpense = borrower.reduce(
-        (sum: any, member: any) => (sum += member.share),
+        (sum, member) => (sum += member.share),
         0,
       )
       if (totalExpense + creditorShare != total) {
