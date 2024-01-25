@@ -15,4 +15,14 @@ expenseRouter.post(
   },
 )
 
+expenseRouter.post(
+  '/update-expense',
+  validateTokenMiddleware,
+  async (req: any, res) => {
+    const { userId } = req.tokenResult
+    const result = await ExpenseController.updateExpense(req.body, userId)
+    res.send(result)
+  },
+)
+
 export default expenseRouter

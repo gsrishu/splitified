@@ -3,8 +3,16 @@ import { IExpense } from '../interface/expenseInterface'
 import { getGroupData } from '../models/groupModel'
 import { returnFunction } from '../util'
 import _ from 'lodash'
-import { httpStatusCode, successResponse, errorLang } from '../response'
-import { addExpense as addExpenseModel } from '../models/expenseModel'
+import {
+  httpStatusCode,
+  successResponse,
+  errorLang,
+  splitifiedError,
+} from '../response'
+import {
+  addExpense as addExpenseModel,
+  updateExpense,
+} from '../models/expenseModel'
 export class ExpenseService {
   static async addExpense(request: IExpense) {
     try {
@@ -59,13 +67,51 @@ export class ExpenseService {
             true,
             successResponse.message.ADD_EXPENSE_SUCCESS,
           )
-        : returnFunction(
-            httpStatusCode.serverError.INTERNAL_SERVER_ERROR,
-            false,
-            errorLang.message.ADD_EXPENSE_FAILED,
-          )
+        : false
     } catch (error) {
       return error
+    }
+  }
+
+  static async updateExpense(request: any, userId: string) {
+    try {
+      const { expenseId, name, creditorShare, borrower, total } = request
+      const totalExpense = borrower.reduce(
+        (sum: any, member: any) => (sum += member.share),
+        0,
+      )
+      if (totalExpense + creditorShare != total) {
+        return returnFunction(
+          httpStatusCode.clientError.BAD_REQUEST,
+          true,
+          errorLang.message.TOTAL_NOT_EQUAL_TO_SHARES,
+        )
+      }
+      const result = await updateExpense(
+        name,
+        creditorShare,
+        borrower,
+        total,
+        expenseId,
+        userId,
+      )
+      if (result) {
+        return returnFunction(
+          httpStatusCode.success.CREATED,
+          true,
+          successResponse.message.EXPENSE_UPDATED_SUCCESS,
+        )
+      }
+      return false
+    } catch (error: any) {
+      const customError = new splitifiedError(
+        error.message,
+        error.code,
+        errorLang.process.updateExpense,
+        errorLang.service.expenseService,
+      )
+      console.info(customError)
+      throw error
     }
   }
 }
