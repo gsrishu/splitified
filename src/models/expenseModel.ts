@@ -1,5 +1,5 @@
 import mongoose, { Types } from 'mongoose'
-import { IExpense,IUpdateExpense } from '../interface/expenseInterface'
+import { IExpense, IUpdateExpense } from '../interface/expenseInterface'
 import { updateGroupExpense } from './groupModel'
 import _ from 'lodash'
 const { v4: uuidv4 } = require('uuid')
@@ -75,7 +75,7 @@ const addExpense = async (expenseData: IExpense) => {
 const updateExpense = async (
   name: string,
   creditorShare: number,
-  borrower:IUpdateExpense["borrower"],
+  borrower: IUpdateExpense['borrower'],
   total: number,
   expenseId: string,
   userId: string,
@@ -91,7 +91,7 @@ const updateExpense = async (
       },
     }
     const result = await expenseModel.updateOne(
-      { $and: [{ _id: expenseId }, { creditor: userId }] },
+      { $and: [{ _id: expenseId }, { creditor: userId }, { settled: false }] },
       updateData,
     )
     return _.get(result, 'modifiedCount')
