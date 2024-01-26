@@ -1,5 +1,9 @@
 import { IGroup } from '../interface/GroupInterface'
-import { IExpense,IUpdateExpense } from '../interface/expenseInterface'
+import {
+  IExpense,
+  IUpdateExpense,
+  IDeleteExpense,
+} from '../interface/expenseInterface'
 import { getGroupData } from '../models/groupModel'
 import { returnFunction } from '../util'
 import _ from 'lodash'
@@ -12,6 +16,7 @@ import {
 import {
   addExpense as addExpenseModel,
   updateExpense,
+  deleteExpense as deleteExpenseModel,
 } from '../models/expenseModel'
 export class ExpenseService {
   static async addExpense(request: IExpense) {
@@ -108,6 +113,33 @@ export class ExpenseService {
         error.message,
         error.code,
         errorLang.process.updateExpense,
+        errorLang.service.expenseService,
+      )
+      console.info(customError)
+      throw error
+    }
+  }
+  static async deleteExpense(deleteExpenseRequest: IDeleteExpense) {
+    try {
+      const { expenseId, groupId, userId } = deleteExpenseRequest
+      const result = await deleteExpenseModel(groupId, expenseId, userId)
+      if(result){
+        return returnFunction(
+          httpStatusCode.success.OK,
+          true,
+          successResponse.message.DELETE_EXPENSE_SUCCESS
+        )
+      }
+    return returnFunction(
+        httpStatusCode.clientError.BAD_REQUEST,
+        true,
+        errorLang.message.DELETE_EXPENSE_FAILED
+      )
+    } catch (error: any) {
+      const customError = new splitifiedError(
+        error.message,
+        error.code,
+        errorLang.process.deleteExpense,
         errorLang.service.expenseService,
       )
       console.info(customError)

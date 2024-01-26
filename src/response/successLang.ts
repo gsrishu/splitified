@@ -8,6 +8,7 @@ export const successResponse = {
     MEMBER_DELETED_SUCCESSFULLY: (num: number) => `${num} Member deleted`,
     ADD_EXPENSE_SUCCESS: 'Expenses added to the group successfully',
     GROUP_DELETED: 'Group deleted',
-    EXPENSE_UPDATED_SUCCESS:'Expenses updated to the group successfully'
+    EXPENSE_UPDATED_SUCCESS:'Expenses updated to the group successfully',
+    DELETE_EXPENSE_SUCCESS: 'Expenses deleted to the group successfully',
   },
 }

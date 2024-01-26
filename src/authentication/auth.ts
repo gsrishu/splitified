@@ -35,7 +35,7 @@ class Authentication {
   async validateToken(token: string) {
     try {
       if (!token) {
-        return {
+        throw {
           statusCode: httpStatusCode.clientError.UNAUTHORIZED,
           message: errorLang.message.USER_NOT_AUTHENTICATED,
         }
@@ -45,7 +45,7 @@ class Authentication {
       }
     } catch (error) {
       if (error instanceof TokenExpiredError) {
-        return {
+        throw {
           statusCode: httpStatusCode.clientError.UNAUTHORIZED,
           message: errorLang.message.TOKEN_EXPIRED,
         }

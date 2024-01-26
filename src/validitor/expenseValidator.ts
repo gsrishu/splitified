@@ -16,7 +16,7 @@ export const expenseValidator = Joi.object<IExpense>({
 })
 
 export const updateExpenseValidator = Joi.object({
-  expenseId:Joi.string().required(),
+  expenseId: Joi.string().required(),
   name: Joi.string().required(),
   creditorShare: Joi.number().required().strict(true),
   borrower: Joi.array()
@@ -27,4 +27,10 @@ export const updateExpenseValidator = Joi.object({
     .required()
     .min(1),
   total: Joi.number().strict(true).required(),
+})
+
+export const deleteExpenseValiditor = Joi.object({
+  groupId: Joi.string().required(),
+  expenseId: Joi.string().required(),
+  userId: Joi.string().required(),
 })

@@ -5,7 +5,7 @@ export const errorLang = {
     userservice: 'userService',
     groupService: 'groupService',
     memberService: 'memberService',
-    expenseService: 'expenseService'
+    expenseService: 'expenseService',
   },
   process: {
     signup: 'signup',
@@ -17,6 +17,7 @@ export const errorLang = {
     deleteMember: 'deleteMember',
     getAllMember: 'getAllMember',
     updateExpense: 'updateExpense',
+    deleteExpense: 'deleteExpense',
   },
   message: {
     USER_ALREADY_EXISTS: 'user already exists',
@@ -41,6 +42,8 @@ export const errorLang = {
       'Not every member is settled in the group',
     DELETE_GROUP_ERROR: 'Group delete error',
     INTERNAL_SERVER_ERROR: 'Internal server error',
+    DELETE_EXPENSE_FAILED:
+    'No such expense is the part of this group',
   },
   commonErrorReturn() {
     return {
