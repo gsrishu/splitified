@@ -5,6 +5,7 @@ export interface IGroup {
   members?: string[]
   expenses?: string[]
   settle?: string[]
+  settledExpense?: string[]
   isActive?: boolean
   createdAt?: Date
   updatedAt?: Date

@@ -1,6 +1,7 @@
 import mongoose, { Schema, Types } from 'mongoose'
 import { IGroup } from '../interface/GroupInterface'
 import _ from 'lodash'
+import { errorMonitor } from 'events'
 const { v4: uuidv4 } = require('uuid')
 const groupSchema: Schema<IGroup> = new mongoose.Schema({
   _id: {
@@ -28,6 +29,12 @@ const groupSchema: Schema<IGroup> = new mongoose.Schema({
     },
   ],
   settle: [
+    {
+      type: String,
+      default: [],
+    },
+  ],
+  settledExpense: [
     {
       type: String,
       default: [],
@@ -145,15 +152,35 @@ const listGroup = async (userId: string) => {
   }
 }
 const memberList = async (groupId: string) => {
-  try{
-    let result:any = await groupModel.find({_id:groupId}).lean()
-    if(!_.isEmpty(result)){   
+  try {
+    let result: any = await groupModel.find({ _id: groupId }).lean()
+    if (!_.isEmpty(result)) {
       result = result[0].members
     }
     return result
-
-  }catch(error){
+  } catch (error) {
     return error
+  }
+}
+const moveExpenseId = async (
+  expenseId: string,
+  groupId: string,
+): Promise<boolean> => {
+  try {
+    const updateExpense = await groupModel.updateOne(
+      { _id: groupId },
+      { $pull: { expenses: expenseId } },
+    )
+    if (updateExpense.matchedCount > 0) {
+      const updateSettledExpense = await groupModel.updateOne(
+        { _id: groupId },
+        { $push: { settledExpense: expenseId } },
+      )
+      if (updateSettledExpense.modifiedCount > 0) return true
+    }
+    return false
+  } catch (error) {
+    throw errorMonitor
   }
 }
 export {
@@ -165,5 +192,6 @@ export {
   updateGroupExpense,
   deleteGroup,
   listGroup,
-  memberList
+  memberList,
+  moveExpenseId
 }

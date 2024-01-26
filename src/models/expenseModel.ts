@@ -1,6 +1,6 @@
 import mongoose, { Types } from 'mongoose'
 import { IExpense, IUpdateExpense } from '../interface/expenseInterface'
-import { updateGroupExpense } from './groupModel'
+import { updateGroupExpense, moveExpenseId } from './groupModel'
 import _ from 'lodash'
 const { v4: uuidv4 } = require('uuid')
 interface IExpenseModel extends IExpense, Document {}
@@ -100,4 +100,23 @@ const updateExpense = async (
     throw error
   }
 }
-export { expenseModel, addExpense, updateExpense }
+const deleteExpense = async (
+  groupId: string,
+  expenseId: string,
+  userId: string,
+): Promise<boolean> => {
+  try {
+    const result = await expenseModel.updateOne(
+      { $and: [{ _id: expenseId }, { creditor: userId }] },
+      { $set: { settled: true } },
+    )
+    if (result.modifiedCount > 0) {
+      const updateGroup = await moveExpenseId(expenseId, groupId)
+      if (updateGroup) return true
+    }
+    return false
+  } catch (error) {
+    throw error
+  }
+}
+export { expenseModel, addExpense, updateExpense, deleteExpense }

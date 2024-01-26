@@ -15,12 +15,20 @@ expenseRouter.post(
   },
 )
 
+expenseRouter.post('/update-expense', async (req: any, res) => {
+  const { userId } = req.tokenResult
+  const result = await ExpenseController.updateExpense(req.body, userId)
+  res.send(result)
+})
 expenseRouter.post(
-  '/update-expense',
+  '/delete-expense',
   validateTokenMiddleware,
   async (req: any, res) => {
     const { userId } = req.tokenResult
-    const result = await ExpenseController.updateExpense(req.body, userId)
+    const result = await ExpenseController.deleteExpense({
+      ...req.body,
+      userId,
+    })
     res.send(result)
   },
 )
